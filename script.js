@@ -1,4 +1,4 @@
-﻿// Основные данные
+// Основные данные
 let currentBuildingId = null;
 let currentClientId = null;
 let currentGalleryBuilding = null;
