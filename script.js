@@ -1,15 +1,15 @@
-// Основные данные
+п»ї// РћСЃРЅРѕРІРЅС‹Рµ РґР°РЅРЅС‹Рµ
 let currentBuildingId = null;
 let currentClientId = null;
 let currentGalleryBuilding = null;
 
-// Данные ЖК
+// Р”Р°РЅРЅС‹Рµ Р–Рљ
 const projectsData = [
     { 
         id: 1, 
-        name: "ЖК Северное Сияние", 
+        name: "Р–Рљ РЎРµРІРµСЂРЅРѕРµ РЎРёСЏРЅРёРµ", 
         status: "active", 
-        address: "ул. Ленина, 15", 
+        address: "СѓР». Р›РµРЅРёРЅР°, 15", 
         progress: "75%",
         flats: [
             { floor: 1, number: "101", area: 45, price: 120000, status: "available" },
@@ -20,9 +20,9 @@ const projectsData = [
     },
     { 
         id: 2, 
-        name: "ЖК Центральный", 
+        name: "Р–Рљ Р¦РµРЅС‚СЂР°Р»СЊРЅС‹Р№", 
         status: "completed", 
-        address: "пр. Мира, 42", 
+        address: "РїСЂ. РњРёСЂР°, 42", 
         progress: "100%",
         flats: [
             { floor: 1, number: "101", area: 48, price: 140000, status: "sold" },
@@ -32,67 +32,67 @@ const projectsData = [
     }
 ];
 
-// Данные риэлторов
+// Р”Р°РЅРЅС‹Рµ СЂРёСЌР»С‚РѕСЂРѕРІ
 const realtorsData = [
     {
         id: 1,
-        name: "Иванов Иван Иванович",
+        name: "РРІР°РЅРѕРІ РРІР°РЅ РРІР°РЅРѕРІРёС‡",
         phone: "+7 (123) 456-78-90",
         deals: [
-            { date: "15.05.2023", object: "ЖК Северное Сияние, кв. 102", sum: "6 250 000 ?" },
-            { date: "22.06.2023", object: "ЖК Центральный, кв. 201", sum: "10 075 000 ?" }
+            { date: "15.05.2023", object: "Р–Рљ РЎРµРІРµСЂРЅРѕРµ РЎРёСЏРЅРёРµ, РєРІ. 102", sum: "6 250 000 в‚Ѕ" },
+            { date: "22.06.2023", object: "Р–Рљ Р¦РµРЅС‚СЂР°Р»СЊРЅС‹Р№, РєРІ. 201", sum: "10 075 000 в‚Ѕ" }
         ]
     },
     {
         id: 2,
-        name: "Петрова Анна Сергеевна",
+        name: "РџРµС‚СЂРѕРІР° РђРЅРЅР° РЎРµСЂРіРµРµРІРЅР°",
         phone: "+7 (987) 654-32-10",
         deals: [
-            { date: "10.04.2023", object: "ЖК Северное Сияние, кв. 101", sum: "5 400 000 ?" }
+            { date: "10.04.2023", object: "Р–Рљ РЎРµРІРµСЂРЅРѕРµ РЎРёСЏРЅРёРµ, РєРІ. 101", sum: "5 400 000 в‚Ѕ" }
         ]
     }
 ];
 
-// Данные клиентов
+// Р”Р°РЅРЅС‹Рµ РєР»РёРµРЅС‚РѕРІ
 const clientsData = [
     {
         id: 1,
-        name: "Смирнов Алексей Владимирович",
+        name: "РЎРјРёСЂРЅРѕРІ РђР»РµРєСЃРµР№ Р’Р»Р°РґРёРјРёСЂРѕРІРёС‡",
         phone: "+7 (111) 222-33-44",
         lastContact: "20.06.2023",
-        notes: "Интересуется 2-комнатными квартирами в центре"
+        notes: "РРЅС‚РµСЂРµСЃСѓРµС‚СЃСЏ 2-РєРѕРјРЅР°С‚РЅС‹РјРё РєРІР°СЂС‚РёСЂР°РјРё РІ С†РµРЅС‚СЂРµ"
     },
     {
         id: 2,
-        name: "Кузнецова Елена Петровна",
+        name: "РљСѓР·РЅРµС†РѕРІР° Р•Р»РµРЅР° РџРµС‚СЂРѕРІРЅР°",
         phone: "+7 (555) 666-77-88",
         lastContact: "15.07.2023",
-        notes: "Рассматривает варианты с отделкой"
+        notes: "Р Р°СЃСЃРјР°С‚СЂРёРІР°РµС‚ РІР°СЂРёР°РЅС‚С‹ СЃ РѕС‚РґРµР»РєРѕР№"
     }
 ];
 
-// Данные галереи
+// Р”Р°РЅРЅС‹Рµ РіР°Р»РµСЂРµРё
 const galleryData = [
     {
         id: 1,
-        name: "ЖК Северное Сияние",
+        name: "Р–Рљ РЎРµРІРµСЂРЅРѕРµ РЎРёСЏРЅРёРµ",
         media: [
-            { type: "image", url: "https://via.placeholder.com/600x400?text=Фасад+ЖК+Северное+Сияние", title: "Фасад здания" },
-            { type: "image", url: "https://via.placeholder.com/600x400?text=Вид+из+окна", title: "Вид из окна" },
-            { type: "video", url: "https://samplelib.com/lib/preview/mp4/sample-5s.mp4", title: "Видео обзор" }
+            { type: "image", url: "https://via.placeholder.com/600x400?text=Р¤Р°СЃР°Рґ+Р–Рљ+РЎРµРІРµСЂРЅРѕРµ+РЎРёСЏРЅРёРµ", title: "Р¤Р°СЃР°Рґ Р·РґР°РЅРёСЏ" },
+            { type: "image", url: "https://via.placeholder.com/600x400?text=Р’РёРґ+РёР·+РѕРєРЅР°", title: "Р’РёРґ РёР· РѕРєРЅР°" },
+            { type: "video", url: "https://samplelib.com/lib/preview/mp4/sample-5s.mp4", title: "Р’РёРґРµРѕ РѕР±Р·РѕСЂ" }
         ]
     },
     {
         id: 2,
-        name: "ЖК Центральный",
+        name: "Р–Рљ Р¦РµРЅС‚СЂР°Р»СЊРЅС‹Р№",
         media: [
-            { type: "image", url: "https://via.placeholder.com/600x400?text=Входная+группа", title: "Входная группа" },
-            { type: "image", url: "https://via.placeholder.com/600x400?text=Дворовая+территория", title: "Дворовая территория" }
+            { type: "image", url: "https://via.placeholder.com/600x400?text=Р’С…РѕРґРЅР°СЏ+РіСЂСѓРїРїР°", title: "Р’С…РѕРґРЅР°СЏ РіСЂСѓРїРїР°" },
+            { type: "image", url: "https://via.placeholder.com/600x400?text=Р”РІРѕСЂРѕРІР°СЏ+С‚РµСЂСЂРёС‚РѕСЂРёСЏ", title: "Р”РІРѕСЂРѕРІР°СЏ С‚РµСЂСЂРёС‚РѕСЂРёСЏ" }
         ]
     }
 ];
 
-// Основные функции
+// РћСЃРЅРѕРІРЅС‹Рµ С„СѓРЅРєС†РёРё
 function showPage(pageId) {
     document.getElementById('mainMenu').style.display = 'none';
     document.getElementById(pageId).style.display = 'block';
@@ -115,7 +115,7 @@ function showMainMenu() {
     document.getElementById('mainMenu').style.display = 'block';
 }
 
-// Тёмная тема
+// РўС‘РјРЅР°СЏ С‚РµРјР°
 const themeToggle = document.getElementById('themeToggle');
 themeToggle.addEventListener('click', () => {
     document.body.classList.toggle('dark-mode');
@@ -124,7 +124,7 @@ themeToggle.addEventListener('click', () => {
         : '<i class="fas fa-moon"></i>';
 });
 
-// Шлейф курсора
+// РЁР»РµР№С„ РєСѓСЂСЃРѕСЂР°
 const buttons = document.querySelectorAll('.menu-button, .back-button, .search-button, .client-button, .gallery-button, .save-button');
 
 buttons.forEach(button => {
@@ -160,7 +160,7 @@ function createCursorTrailEffect(element) {
     });
 }
 
-// ===== РАЗДЕЛ "ШАХМАТКИ ЖК" =====
+// ===== Р РђР—Р”Р•Р› "РЁРђРҐРњРђРўРљР Р–Рљ" =====
 function renderProjects(projects) {
     const container = document.getElementById('projectsContainer');
     container.innerHTML = '';
@@ -175,21 +175,21 @@ function renderProjects(projects) {
         switch(project.status) {
             case 'active': 
                 statusClass = 'status-active';
-                statusText = 'В работе';
+                statusText = 'Р’ СЂР°Р±РѕС‚Рµ';
                 break;
             case 'completed':
                 statusClass = 'status-completed';
-                statusText = 'Завершён';
+                statusText = 'Р—Р°РІРµСЂС€С‘РЅ';
                 break;
             default:
                 statusClass = 'status-planned';
-                statusText = 'Планируется';
+                statusText = 'РџР»Р°РЅРёСЂСѓРµС‚СЃСЏ';
         }
         
         tile.innerHTML = `
             <div class="project-title">${project.name}</div>
-            <div><small>Адрес:</small> ${project.address}</div>
-            <div><small>Готовность:</small> ${project.progress}</div>
+            <div><small>РђРґСЂРµСЃ:</small> ${project.address}</div>
+            <div><small>Р“РѕС‚РѕРІРЅРѕСЃС‚СЊ:</small> ${project.progress}</div>
             <div class="project-status ${statusClass}">${statusText}</div>
         `;
         
@@ -207,7 +207,7 @@ function showFlats(project) {
     const floorsContainer = document.getElementById('floorsContainer');
     floorsContainer.innerHTML = '';
     
-    // Группируем квартиры по этажам
+    // Р“СЂСѓРїРїРёСЂСѓРµРј РєРІР°СЂС‚РёСЂС‹ РїРѕ СЌС‚Р°Р¶Р°Рј
     const floors = {};
     project.flats.forEach(flat => {
         if (!floors[flat.floor]) {
@@ -216,14 +216,14 @@ function showFlats(project) {
         floors[flat.floor].push(flat);
     });
     
-    // Сортируем этажи и рендерим
+    // РЎРѕСЂС‚РёСЂСѓРµРј СЌС‚Р°Р¶Рё Рё СЂРµРЅРґРµСЂРёРј
     Object.keys(floors).sort().forEach(floor => {
         const floorSection = document.createElement('div');
         floorSection.className = 'floor-section';
         
         const floorTitle = document.createElement('h4');
         floorTitle.className = 'floor-title';
-        floorTitle.textContent = `Этаж ${floor}`;
+        floorTitle.textContent = `Р­С‚Р°Р¶ ${floor}`;
         floorSection.appendChild(floorTitle);
         
         const flatsGrid = document.createElement('div');
@@ -235,16 +235,16 @@ function showFlats(project) {
             
             let statusText = '';
             switch(flat.status) {
-                case 'sold': statusText = 'Продано'; break;
-                case 'available': statusText = 'Свободна'; break;
-                case 'reserved': statusText = 'Бронь'; break;
+                case 'sold': statusText = 'РџСЂРѕРґР°РЅРѕ'; break;
+                case 'available': statusText = 'РЎРІРѕР±РѕРґРЅР°'; break;
+                case 'reserved': statusText = 'Р‘СЂРѕРЅСЊ'; break;
             }
             
             flatTile.innerHTML = `
-                <div class="flat-info"><strong>Кв. ${flat.number}</strong></div>
-                <div class="flat-info">Площадь: ${flat.area} м?</div>
-                <div class="flat-info">Цена: ${(flat.area * flat.price).toLocaleString()} ?</div>
-                <div class="flat-info">(${flat.price.toLocaleString()} ?/м?)</div>
+                <div class="flat-info"><strong>РљРІ. ${flat.number}</strong></div>
+                <div class="flat-info">РџР»РѕС‰Р°РґСЊ: ${flat.area} РјВІ</div>
+                <div class="flat-info">Р¦РµРЅР°: ${(flat.area * flat.price).toLocaleString()} в‚Ѕ</div>
+                <div class="flat-info">(${flat.price.toLocaleString()} в‚Ѕ/РјВІ)</div>
                 <div class="flat-info"><strong>${statusText}</strong></div>
             `;
             
@@ -270,7 +270,7 @@ function filterProjects() {
     renderProjects(filtered);
 }
 
-// ===== РАЗДЕЛ "РИЭЛТОРЫ" =====
+// ===== Р РђР—Р”Р•Р› "Р РР­Р›РўРћР Р«" =====
 function renderRealtors(realtors) {
     const container = document.getElementById('realtorsContainer');
     container.innerHTML = '';
@@ -281,7 +281,7 @@ function renderRealtors(realtors) {
         
         let dealsHtml = '';
         if (realtor.deals && realtor.deals.length > 0) {
-            dealsHtml = '<div class="realtor-deals"><strong>Сделки:</strong>';
+            dealsHtml = '<div class="realtor-deals"><strong>РЎРґРµР»РєРё:</strong>';
             realtor.deals.forEach(deal => {
                 dealsHtml += `
                     <div class="deal-item">
@@ -313,7 +313,7 @@ function filterRealtors() {
     renderRealtors(filtered);
 }
 
-// ===== РАЗДЕЛ "КЛИЕНТЫ" =====
+// ===== Р РђР—Р”Р•Р› "РљР›РР•РќРўР«" =====
 function renderClients(clients) {
     const container = document.getElementById('clientsContainer');
     container.innerHTML = '';
@@ -336,7 +336,7 @@ function openClientModal(client) {
     currentClientId = client.id;
     document.getElementById('modalClientName').textContent = client.name;
     document.getElementById('modalClientPhone').textContent = client.phone;
-    document.getElementById('modalClientLastContact').textContent = client.lastContact || 'нет данных';
+    document.getElementById('modalClientLastContact').textContent = client.lastContact || 'РЅРµС‚ РґР°РЅРЅС‹С…';
     document.getElementById('clientNotes').value = client.notes || '';
     
     document.getElementById('clientModal').style.display = 'block';
@@ -351,7 +351,7 @@ function saveClientNotes() {
         const client = clientsData.find(c => c.id === currentClientId);
         if (client) {
             client.notes = document.getElementById('clientNotes').value;
-            alert('Заметки сохранены');
+            alert('Р—Р°РјРµС‚РєРё СЃРѕС…СЂР°РЅРµРЅС‹');
             closeModal();
         }
     }
@@ -366,7 +366,7 @@ function filterClients() {
     renderClients(filtered);
 }
 
-// ===== РАЗДЕЛ "ГАЛЕРЕЯ" =====
+// ===== Р РђР—Р”Р•Р› "Р“РђР›Р•Р Р•РЇ" =====
 function renderGalleryButtons() {
     const container = document.getElementById('galleryButtons');
     container.innerHTML = '';
@@ -403,7 +403,7 @@ function showGalleryContent(building) {
             mediaItem.innerHTML = `
                 <video controls>
                     <source src="${item.url}" type="video/mp4">
-                    Ваш браузер не поддерживает видео.
+                    Р’Р°С€ Р±СЂР°СѓР·РµСЂ РЅРµ РїРѕРґРґРµСЂР¶РёРІР°РµС‚ РІРёРґРµРѕ.
                 </video>
                 <div class="media-title">${item.title}</div>
             `;
@@ -418,11 +418,11 @@ function hideGalleryContent() {
     document.getElementById('galleryButtons').style.display = 'grid';
 }
 
-// Инициализация
+// РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ
 document.addEventListener('DOMContentLoaded', () => {
     showMainMenu();
     
-    // Закрытие модального окна при клике вне его
+    // Р—Р°РєСЂС‹С‚РёРµ РјРѕРґР°Р»СЊРЅРѕРіРѕ РѕРєРЅР° РїСЂРё РєР»РёРєРµ РІРЅРµ РµРіРѕ
     window.addEventListener('click', (event) => {
         const modal = document.getElementById('clientModal');
         if (event.target === modal) {
