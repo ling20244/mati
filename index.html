@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
 </head>
-<body>
     <div class="container">
         <button class="theme-toggle" id="themeToggle">
             <i class="fas fa-moon"></i>
@@ -18,28 +17,28 @@
         <div id="mainMenu">
             <div class="menu-container">
                 <button class="menu-button" onclick="showPage('chess')">
-                    <i class="fas fa-chess-rook"></i> Шахматки ЖК
+                    <i class="fas fa-chess-rook"></i> ГГ ГµГ¬Г ГІГЄГЁ Г†ГЉ
                 </button>
                 <button class="menu-button" onclick="showPage('realtors')">
-                    <i class="fas fa-user-tie"></i> Риэлторы
+                    <i class="fas fa-user-tie"></i> ГђГЁГЅГ«ГІГ®Г°Г»
                 </button>
                 <button class="menu-button" onclick="showPage('clients')">
-                    <i class="fas fa-users"></i> Клиенты
+                    <i class="fas fa-users"></i> ГЉГ«ГЁГҐГ­ГІГ»
                 </button>
                 <button class="menu-button" onclick="showPage('gallery')">
-                    <i class="fas fa-images"></i> Галерея
+                    <i class="fas fa-images"></i> ГѓГ Г«ГҐГ°ГҐГї
                 </button>
             </div>
         </div>
         
         <div id="chess" class="page">
             <button class="back-button" onclick="showMainMenu()">
-                <i class="fas fa-arrow-left"></i> Назад
+                <i class="fas fa-arrow-left"></i> ГЌГ Г§Г Г¤
             </button>
-            <h2>Шахматки ЖК</h2>
+            <h2>ГГ ГµГ¬Г ГІГЄГЁ Г†ГЉ</h2>
             
             <div class="controls">
-                <input type="text" id="searchInput" placeholder="Поиск ЖК..." class="search-input">
+                <input type="text" id="searchInput" placeholder="ГЏГ®ГЁГ±ГЄ Г†ГЉ..." class="search-input">
                 <button onclick="filterProjects()" class="search-button">
                     <i class="fas fa-search"></i>
                 </button>
@@ -49,7 +48,7 @@
             
             <div id="flatsContainer" class="flats-container" style="display:none;">
                 <button class="back-button" onclick="hideFlats()">
-                    <i class="fas fa-arrow-left"></i> Назад к ЖК
+                    <i class="fas fa-arrow-left"></i> ГЌГ Г§Г Г¤ ГЄ Г†ГЉ
                 </button>
                 <h3 id="currentBuildingTitle"></h3>
                 <div class="floors-container" id="floorsContainer"></div>
@@ -58,12 +57,12 @@
         
         <div id="realtors" class="page">
             <button class="back-button" onclick="showMainMenu()">
-                <i class="fas fa-arrow-left"></i> Назад
+                <i class="fas fa-arrow-left"></i> ГЌГ Г§Г Г¤
             </button>
-            <h2>Риэлторы</h2>
+            <h2>ГђГЁГЅГ«ГІГ®Г°Г»</h2>
             
             <div class="controls">
-                <input type="text" id="realtorSearch" placeholder="Поиск риэлтора..." class="search-input">
+                <input type="text" id="realtorSearch" placeholder="ГЏГ®ГЁГ±ГЄ Г°ГЁГЅГ«ГІГ®Г°Г ..." class="search-input">
                 <button onclick="filterRealtors()" class="search-button">
                     <i class="fas fa-search"></i>
                 </button>
@@ -74,12 +73,12 @@
         
         <div id="clients" class="page">
             <button class="back-button" onclick="showMainMenu()">
-                <i class="fas fa-arrow-left"></i> Назад
+                <i class="fas fa-arrow-left"></i> ГЌГ Г§Г Г¤
             </button>
-            <h2>Клиенты</h2>
+            <h2>ГЉГ«ГЁГҐГ­ГІГ»</h2>
             
             <div class="controls">
-                <input type="text" id="clientSearch" placeholder="Поиск клиента..." class="search-input">
+                <input type="text" id="clientSearch" placeholder="ГЏГ®ГЁГ±ГЄ ГЄГ«ГЁГҐГ­ГІГ ..." class="search-input">
                 <button onclick="filterClients()" class="search-button">
                     <i class="fas fa-search"></i>
                 </button>
@@ -92,26 +91,26 @@
                     <span class="close" onclick="closeModal()">&times;</span>
                     <h3 id="modalClientName"></h3>
                     <div class="client-info">
-                        <p><strong>Телефон:</strong> <span id="modalClientPhone"></span></p>
-                        <p><strong>Последний контакт:</strong> <span id="modalClientLastContact"></span></p>
+                        <p><strong>Г’ГҐГ«ГҐГґГ®Г­:</strong> <span id="modalClientPhone"></span></p>
+                        <p><strong>ГЏГ®Г±Г«ГҐГ¤Г­ГЁГ© ГЄГ®Г­ГІГ ГЄГІ:</strong> <span id="modalClientLastContact"></span></p>
                     </div>
-                    <textarea id="clientNotes" placeholder="Заметки о клиенте..."></textarea>
-                    <button onclick="saveClientNotes()" class="save-button">Сохранить</button>
+                    <textarea id="clientNotes" placeholder="Г‡Г Г¬ГҐГІГЄГЁ Г® ГЄГ«ГЁГҐГ­ГІГҐ..."></textarea>
+                    <button onclick="saveClientNotes()" class="save-button">Г‘Г®ГµГ°Г Г­ГЁГІГј</button>
                 </div>
             </div>
         </div>
         
         <div id="gallery" class="page">
             <button class="back-button" onclick="showMainMenu()">
-                <i class="fas fa-arrow-left"></i> Назад
+                <i class="fas fa-arrow-left"></i> ГЌГ Г§Г Г¤
             </button>
-            <h2>Галерея</h2>
+            <h2>ГѓГ Г«ГҐГ°ГҐГї</h2>
             
             <div class="gallery-buttons" id="galleryButtons"></div>
             
             <div id="galleryContent" class="gallery-content" style="display:none;">
                 <button class="back-button" onclick="hideGalleryContent()">
-                    <i class="fas fa-arrow-left"></i> Назад
+                    <i class="fas fa-arrow-left"></i> ГЌГ Г§Г Г¤
                 </button>
                 <h3 id="galleryBuildingTitle"></h3>
                 <div class="media-container" id="mediaContainer"></div>
