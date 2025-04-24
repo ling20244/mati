@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
 </head>
+<body>
     <div class="container">
         <button class="theme-toggle" id="themeToggle">
             <i class="fas fa-moon"></i>
@@ -17,28 +18,28 @@
         <div id="mainMenu">
             <div class="menu-container">
                 <button class="menu-button" onclick="showPage('chess')">
-                    <i class="fas fa-chess-rook"></i> Øàõìàòêè ÆÊ
+                    <i class="fas fa-chess-rook"></i> Шахматки ЖК
                 </button>
                 <button class="menu-button" onclick="showPage('realtors')">
-                    <i class="fas fa-user-tie"></i> Ðèýëòîðû
+                    <i class="fas fa-user-tie"></i> Риэлторы
                 </button>
                 <button class="menu-button" onclick="showPage('clients')">
-                    <i class="fas fa-users"></i> Êëèåíòû
+                    <i class="fas fa-users"></i> Клиенты
                 </button>
                 <button class="menu-button" onclick="showPage('gallery')">
-                    <i class="fas fa-images"></i> Ãàëåðåÿ
+                    <i class="fas fa-images"></i> Галерея
                 </button>
             </div>
         </div>
         
         <div id="chess" class="page">
             <button class="back-button" onclick="showMainMenu()">
-                <i class="fas fa-arrow-left"></i> Íàçàä
+                <i class="fas fa-arrow-left"></i> Назад
             </button>
-            <h2>Øàõìàòêè ÆÊ</h2>
+            <h2>Шахматки ЖК</h2>
             
             <div class="controls">
-                <input type="text" id="searchInput" placeholder="Ïîèñê ÆÊ..." class="search-input">
+                <input type="text" id="searchInput" placeholder="Поиск ЖК..." class="search-input">
                 <button onclick="filterProjects()" class="search-button">
                     <i class="fas fa-search"></i>
                 </button>
@@ -48,7 +49,7 @@
             
             <div id="flatsContainer" class="flats-container" style="display:none;">
                 <button class="back-button" onclick="hideFlats()">
-                    <i class="fas fa-arrow-left"></i> Íàçàä ê ÆÊ
+                    <i class="fas fa-arrow-left"></i> Назад к ЖК
                 </button>
                 <h3 id="currentBuildingTitle"></h3>
                 <div class="floors-container" id="floorsContainer"></div>
@@ -57,12 +58,12 @@
         
         <div id="realtors" class="page">
             <button class="back-button" onclick="showMainMenu()">
-                <i class="fas fa-arrow-left"></i> Íàçàä
+                <i class="fas fa-arrow-left"></i> Назад
             </button>
-            <h2>Ðèýëòîðû</h2>
+            <h2>Риэлторы</h2>
             
             <div class="controls">
-                <input type="text" id="realtorSearch" placeholder="Ïîèñê ðèýëòîðà..." class="search-input">
+                <input type="text" id="realtorSearch" placeholder="Поиск риэлтора..." class="search-input">
                 <button onclick="filterRealtors()" class="search-button">
                     <i class="fas fa-search"></i>
                 </button>
@@ -73,12 +74,12 @@
         
         <div id="clients" class="page">
             <button class="back-button" onclick="showMainMenu()">
-                <i class="fas fa-arrow-left"></i> Íàçàä
+                <i class="fas fa-arrow-left"></i> Назад
             </button>
-            <h2>Êëèåíòû</h2>
+            <h2>Клиенты</h2>
             
             <div class="controls">
-                <input type="text" id="clientSearch" placeholder="Ïîèñê êëèåíòà..." class="search-input">
+                <input type="text" id="clientSearch" placeholder="Поиск клиента..." class="search-input">
                 <button onclick="filterClients()" class="search-button">
                     <i class="fas fa-search"></i>
                 </button>
@@ -91,26 +92,26 @@
                     <span class="close" onclick="closeModal()">&times;</span>
                     <h3 id="modalClientName"></h3>
                     <div class="client-info">
-                        <p><strong>Òåëåôîí:</strong> <span id="modalClientPhone"></span></p>
-                        <p><strong>Ïîñëåäíèé êîíòàêò:</strong> <span id="modalClientLastContact"></span></p>
+                        <p><strong>Телефон:</strong> <span id="modalClientPhone"></span></p>
+                        <p><strong>Последний контакт:</strong> <span id="modalClientLastContact"></span></p>
                     </div>
-                    <textarea id="clientNotes" placeholder="Çàìåòêè î êëèåíòå..."></textarea>
-                    <button onclick="saveClientNotes()" class="save-button">Ñîõðàíèòü</button>
+                    <textarea id="clientNotes" placeholder="Заметки о клиенте..."></textarea>
+                    <button onclick="saveClientNotes()" class="save-button">Сохранить</button>
                 </div>
             </div>
         </div>
         
         <div id="gallery" class="page">
             <button class="back-button" onclick="showMainMenu()">
-                <i class="fas fa-arrow-left"></i> Íàçàä
+                <i class="fas fa-arrow-left"></i> Назад
             </button>
-            <h2>Ãàëåðåÿ</h2>
+            <h2>Галерея</h2>
             
             <div class="gallery-buttons" id="galleryButtons"></div>
             
             <div id="galleryContent" class="gallery-content" style="display:none;">
                 <button class="back-button" onclick="hideGalleryContent()">
-                    <i class="fas fa-arrow-left"></i> Íàçàä
+                    <i class="fas fa-arrow-left"></i> Назад
                 </button>
                 <h3 id="galleryBuildingTitle"></h3>
                 <div class="media-container" id="mediaContainer"></div>
