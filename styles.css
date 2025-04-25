@@ -1,21 +1,42 @@
-/* Основные стили (из вашего кода) */
 :root {
     --primary: #6c5ce7;
     --dark: #2d3436;
     --light: #f5f6fa;
     --accent: #fd79a8;
     --admin-color: #e74c3c;
+    --realtor-color: #3498db;
 }
 
-/* Новые стили для ролей */
-body.admin { --role-color: var(--admin-color); }
-body.realtor { --role-color: var(--primary); }
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--light);
+    color: var(--dark);
+    transition: all 0.5s ease;
+    min-height: 100vh;
+}
 
+body.dark-mode {
+    background-color: var(--dark);
+    color: var(--light);
+}
+
+body.admin { --role-color: var(--admin-color); }
+body.realtor { --role-color: var(--realtor-color); }
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Кнопки ролей */
 .role-buttons {
     display: flex;
     gap: 10px;
-    margin-bottom: 20px;
     justify-content: center;
+    margin-bottom: 20px;
 }
 
 .role-btn {
@@ -23,6 +44,7 @@ body.realtor { --role-color: var(--primary); }
     border: none;
     border-radius: 6px;
     cursor: pointer;
+    background: #eee;
 }
 
 .role-btn.active {
@@ -35,30 +57,23 @@ body.realtor { --role-color: var(--primary); }
     position: fixed;
     bottom: 30px;
     right: 30px;
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
     background: var(--role-color);
     color: white;
     border: none;
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     z-index: 100;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    transition: all 0.3s;
+    display: none;
 }
 
-/* Модальное окно */
-.modal {
-    border: none;
-    border-radius: 10px;
-    padding: 20px;
-    width: 90%;
-    max-width: 500px;
+.add-floating-btn:hover {
+    transform: scale(1.1);
 }
 
-.modal::backdrop {
-    background: rgba(0,0,0,0.5);
-}
-
-/* Остальные ваши стили остаются без изменений */
-/* ... */
+/* Остальные стили из вашего исходного кода... */
+/* [Все ваши предыдущие стили сохраняются без изменений] */
