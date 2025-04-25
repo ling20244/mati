@@ -3,6 +3,7 @@ let currentBuildingId = null;
 let currentClientId = null;
 let currentGalleryBuilding = null;
 let currentRole = 'admin';
+
 // Данные ЖК
 const projectsData = [
     { 
@@ -31,6 +32,7 @@ const projectsData = [
         ]
     }
 ];
+
 // Данные риэлторов
 const realtorsData = [
     {
@@ -51,6 +53,7 @@ const realtorsData = [
         ]
     }
 ];
+
 // Данные клиентов
 const clientsData = [
     {
@@ -68,6 +71,7 @@ const clientsData = [
         notes: "Рассматривает варианты с отделкой"
     }
 ];
+
 // Данные галереи
 const galleryData = [
     {
@@ -88,6 +92,7 @@ const galleryData = [
         ]
     }
 ];
+
 // Система ролей
 function setRole(role) {
     currentRole = role;
@@ -95,34 +100,17 @@ function setRole(role) {
     document.querySelectorAll('.role-btn').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.role === role);
     });
-    toggleAddButton();
+    document.getElementById('addFloatingBtn').style.display = role === 'admin' ? 'block' : 'none';
 }
-function toggleAddButton() {
-    document.getElementById('addFloatingBtn').style.display = currentRole === 'admin' ? 'block' : 'none';
-}
-// Добавление ЖК
-document.getElementById('addFloatingBtn').addEventListener('click', () => {
-    document.getElementById('addModal').showModal();
-});
-document.getElementById('addForm').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const newProject = {
-        id: Date.now(),
-        name: document.getElementById('projectName').value,
-        address: document.getElementById('projectAddress').value,
-        status: document.getElementById('projectStatus').value,
-        flats: []
-    };
-    projectsData.push(newProject);
-    localStorage.setItem('projectsData', JSON.stringify(projectsData));
-    document.getElementById('addModal').close();
-    renderProjects(projectsData);
-    document.getElementById('addForm').reset();
-});
+
 // Основные функции
-function showPage(pageId) {
+window.showPage = function(pageId) {
     document.getElementById('mainMenu').style.display = 'none';
+    document.querySelectorAll('.page').forEach(page => {
+        page.style.display = 'none';
+    });
     document.getElementById(pageId).style.display = 'block';
+    
     if (pageId === 'chess') {
         renderProjects(projectsData);
     } else if (pageId === 'realtors') {
@@ -132,59 +120,76 @@ function showPage(pageId) {
     } else if (pageId === 'gallery') {
         renderGalleryButtons();
     }
-}
-function showMainMenu() {
+};
+
+window.showMainMenu = function() {
     document.querySelectorAll('.page').forEach(page => {
         page.style.display = 'none';
     });
     document.getElementById('mainMenu').style.display = 'block';
-}
+};
+
 // Тёмная тема
-const themeToggle = document.getElementById('themeToggle');
-themeToggle.addEventListener('click', () => {
-    document.body.classList.toggle('dark-mode');
-    themeToggle.innerHTML = document.body.classList.contains('dark-mode') 
-        ? '<i class="fas fa-sun"></i>' 
-        : '<i class="fas fa-moon"></i>';
-});
-// Шлейф курсора
-const buttons = document.querySelectorAll('.menu-button, .back-button, .search-button, .client-button, .gallery-button, .save-button');
-buttons.forEach(button => {
-    button.addEventListener('mouseenter', () => {
-        createCursorTrailEffect(button);
-    });
-});
-function createCursorTrailEffect(element) {
-    let dots = [];
-    element.addEventListener('mousemove', (e) => {
-        const dot = document.createElement('div');
-        dot.className = 'trail-dot';
-        dot.style.left = e.clientX + 'px';
-        dot.style.top = e.clientY + 'px';
-        document.body.appendChild(dot);
-        dots.push(dot);
-        setTimeout(() => {
-            dot.style.opacity = '0';
-            setTimeout(() => dot.remove(), 300);
-        }, 500);
-    });
-    element.addEventListener('mouseleave', () => {
-        dots.forEach(dot => {
-            dot.style.opacity = '0';
-            setTimeout(() => dot.remove(), 300);
-        });
-        dots = [];
+function initThemeToggle() {
+    const themeToggle = document.getElementById('themeToggle');
+    themeToggle.addEventListener('click', function() {
+        document.body.classList.toggle('dark-mode');
+        this.innerHTML = document.body.classList.contains('dark-mode') 
+            ? '<i class="fas fa-sun"></i>' 
+            : '<i class="fas fa-moon"></i>';
     });
 }
+
+// Шлейф курсора
+function initCursorTrail() {
+    const buttons = document.querySelectorAll('.menu-button, .back-button, .search-button, .client-button, .gallery-button, .save-button');
+
+    buttons.forEach(button => {
+        button.addEventListener('mouseenter', () => {
+            createCursorTrailEffect(button);
+        });
+    });
+
+    function createCursorTrailEffect(element) {
+        let dots = [];
+        
+        element.addEventListener('mousemove', (e) => {
+            const dot = document.createElement('div');
+            dot.className = 'trail-dot';
+            dot.style.left = e.clientX + 'px';
+            dot.style.top = e.clientY + 'px';
+            document.body.appendChild(dot);
+            
+            dots.push(dot);
+            
+            setTimeout(() => {
+                dot.style.opacity = '0';
+                setTimeout(() => dot.remove(), 300);
+            }, 500);
+        });
+        
+        element.addEventListener('mouseleave', () => {
+            dots.forEach(dot => {
+                dot.style.opacity = '0';
+                setTimeout(() => dot.remove(), 300);
+            });
+            dots = [];
+        });
+    }
+}
+
 // ===== РАЗДЕЛ "ШАХМАТКИ ЖК" =====
 function renderProjects(projects) {
     const container = document.getElementById('projectsContainer');
     container.innerHTML = '';
+    
     projects.forEach(project => {
         const tile = document.createElement('div');
         tile.className = 'project-tile';
+        
         let statusClass = '';
         let statusText = '';
+        
         switch(project.status) {
             case 'active': 
                 statusClass = 'status-active';
@@ -198,23 +203,28 @@ function renderProjects(projects) {
                 statusClass = 'status-planned';
                 statusText = 'Планируется';
         }
+        
         tile.innerHTML = `
             <div class="project-title">${project.name}</div>
             <div><small>Адрес:</small> ${project.address}</div>
             <div><small>Готовность:</small> ${project.progress}</div>
             <div class="project-status ${statusClass}">${statusText}</div>
         `;
+        
         tile.addEventListener('click', () => showFlats(project));
         container.appendChild(tile);
     });
 }
+
 function showFlats(project) {
     currentBuildingId = project.id;
     document.getElementById('projectsContainer').style.display = 'none';
     document.getElementById('flatsContainer').style.display = 'block';
     document.getElementById('currentBuildingTitle').textContent = project.name;
+    
     const floorsContainer = document.getElementById('floorsContainer');
     floorsContainer.innerHTML = '';
+    
     // Группируем квартиры по этажам
     const floors = {};
     project.flats.forEach(flat => {
@@ -223,25 +233,31 @@ function showFlats(project) {
         }
         floors[flat.floor].push(flat);
     });
+    
     // Сортируем этажи и рендерим
     Object.keys(floors).sort().forEach(floor => {
         const floorSection = document.createElement('div');
         floorSection.className = 'floor-section';
+        
         const floorTitle = document.createElement('h4');
         floorTitle.className = 'floor-title';
         floorTitle.textContent = `Этаж ${floor}`;
         floorSection.appendChild(floorTitle);
+        
         const flatsGrid = document.createElement('div');
         flatsGrid.className = 'flats-grid';
+        
         floors[floor].forEach(flat => {
             const flatTile = document.createElement('div');
             flatTile.className = `flat-tile flat-status-${flat.status}`;
+            
             let statusText = '';
             switch(flat.status) {
                 case 'sold': statusText = 'Продано'; break;
                 case 'available': statusText = 'Свободна'; break;
                 case 'reserved': statusText = 'Бронь'; break;
             }
+            
             flatTile.innerHTML = `
                 <div class="flat-info"><strong>Кв. ${flat.number}</strong></div>
                 <div class="flat-info">Площадь: ${flat.area} м²</div>
@@ -249,31 +265,38 @@ function showFlats(project) {
                 <div class="flat-info">(${flat.price.toLocaleString()} ₽/м²)</div>
                 <div class="flat-info"><strong>${statusText}</strong></div>
             `;
+            
             flatsGrid.appendChild(flatTile);
         });
+        
         floorSection.appendChild(flatsGrid);
         floorsContainer.appendChild(floorSection);
     });
 }
-function hideFlats() {
+
+window.hideFlats = function() {
     document.getElementById('flatsContainer').style.display = 'none';
     document.getElementById('projectsContainer').style.display = 'grid';
-}
-function filterProjects() {
+};
+
+window.filterProjects = function() {
     const searchTerm = document.getElementById('searchInput').value.toLowerCase();
     const filtered = projectsData.filter(project => 
         project.name.toLowerCase().includes(searchTerm) || 
         project.address.toLowerCase().includes(searchTerm)
     );
     renderProjects(filtered);
-}
+};
+
 // ===== РАЗДЕЛ "РИЭЛТОРЫ" =====
 function renderRealtors(realtors) {
     const container = document.getElementById('realtorsContainer');
     container.innerHTML = '';
+    
     realtors.forEach(realtor => {
         const card = document.createElement('div');
         card.className = 'realtor-card';
+        
         let dealsHtml = '';
         if (realtor.deals && realtor.deals.length > 0) {
             dealsHtml = '<div class="realtor-deals"><strong>Сделки:</strong>';
@@ -288,21 +311,68 @@ function renderRealtors(realtors) {
             });
             dealsHtml += '</div>';
         }
+        
         card.innerHTML = `
             <div class="realtor-name">${realtor.name}</div>
             <div class="realtor-phone"><i class="fas fa-phone"></i> ${realtor.phone}</div>
             ${dealsHtml}
         `;
+        
         container.appendChild(card);
     });
 }
-function filterRealtors() {
+
+window.filterRealtors = function() {
     const searchTerm = document.getElementById('realtorSearch').value.toLowerCase();
     const filtered = realtorsData.filter(realtor => 
         realtor.name.toLowerCase().includes(searchTerm) || 
         realtor.phone.toLowerCase().includes(searchTerm)
     );
     renderRealtors(filtered);
-}
+};
+
 // ===== РАЗДЕЛ "КЛИЕНТЫ" =====
 function renderClients(clients) {
+    const container = document.getElementById('clientsContainer');
+    container.innerHTML = '';
+    
+    clients.forEach(client => {
+        const button = document.createElement('button');
+        button.className = 'client-button';
+        
+        button.innerHTML = `
+            <div class="client-name">${client.name}</div>
+            <div class="client-phone">${client.phone}</div>
+        `;
+        
+        button.addEventListener('click', () => openClientModal(client));
+        container.appendChild(button);
+    });
+}
+
+function openClientModal(client) {
+    currentClientId = client.id;
+    document.getElementById('modalClientName').textContent = client.name;
+    document.getElementById('modalClientPhone').textContent = client.phone;
+    document.getElementById('modalClientLastContact').textContent = client.lastContact || 'нет данных';
+    document.getElementById('clientNotes').value = client.notes || '';
+    
+    document.getElementById('clientModal').style.display = 'block';
+}
+
+window.closeModal = function() {
+    document.getElementById('clientModal').style.display = 'none';
+};
+
+window.saveClientNotes = function() {
+    if (currentClientId) {
+        const client = clientsData.find(c => c.id === currentClientId);
+        if (client) {
+            client.notes = document.getElementById('clientNotes').value;
+            alert('Заметки сохранены');
+            closeModal();
+        }
+    }
+};
+
+window.filterClients = function
