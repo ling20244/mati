@@ -5,18 +5,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mati</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body class="dark-mode">
+    <!-- Форма входа -->
+    <dialog id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('loginModal')">&times;</span>
+            <h3>Вход в систему</h3>
+            <form id="loginForm">
+                <div class="input-group">
+                    <label for="loginPhone">Телефон</label>
+                    <input type="tel" id="loginPhone" placeholder="+7 (___) ___-__-__" required>
+                </div>
+                <div class="input-group">
+                    <label for="loginPassword">Пароль</label>
+                    <input type="password" id="loginPassword" placeholder="Введите пароль" required>
+                </div>
+                <button type="submit" class="submit-btn">Войти</button>
+            </form>
+        </div>
+    </dialog>
+
     <div class="container">
         <button class="theme-toggle" id="themeToggle">
             <i class="fas fa-lightbulb"></i>
         </button>
         
         <div class="role-buttons">
-            <button class="role-btn active" data-role="admin">Админ</button>
-            <button class="role-btn" data-role="realtor">Риэлтор</button>
+            <button class="role-btn admin-btn active" onclick="showLoginModal('admin')">
+                Админ
+            </button>
+            <button class="role-btn realtor-btn" onclick="showLoginModal('realtor')">
+                Риэлтор
+            </button>
         </div>
 
         <h1 class="logo">Mati</h1>
@@ -38,28 +61,70 @@
             </div>
         </div>
 
+        <!-- Модальное окно добавления ЖК -->
         <dialog id="addModal" class="modal">
-            <form id="addForm">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('addModal')">&times;</span>
                 <h3>Добавить ЖК</h3>
-                <input type="text" id="projectName" placeholder="Название" required>
-                <input type="text" id="projectAddress" placeholder="Адрес" required>
-                <select id="projectStatus">
-                    <option value="active">В работе</option>
-                    <option value="planned">Планируется</option>
-                </select>
-                <button type="submit">Сохранить</button>
-            </form>
+                <form id="addForm">
+                    <div class="input-group">
+                        <input type="text" id="projectName" placeholder="Название" required>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" id="projectAddress" placeholder="Адрес" required>
+                    </div>
+                    <div class="input-group">
+                        <select id="projectStatus">
+                            <option value="active">В работе</option>
+                            <option value="planned">Планируется</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="submit-btn">Сохранить</button>
+                </form>
+            </div>
         </dialog>
 
+        <!-- Модальное окно добавления риэлтора -->
         <dialog id="addRealtorModal" class="modal">
-            <form id="addRealtorForm">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('addRealtorModal')">&times;</span>
                 <h3>Добавить риэлтора</h3>
-                <input type="text" id="realtorName" placeholder="ФИО" required>
-                <input type="text" id="realtorPhone" placeholder="Телефон" required>
-                <button type="submit">Сохранить</button>
-            </form>
+                <form id="addRealtorForm">
+                    <div class="input-group">
+                        <input type="text" id="realtorName" placeholder="ФИО" required>
+                    </div>
+                    <div class="input-group">
+                        <input type="tel" id="realtorPhone" placeholder="Телефон" required>
+                    </div>
+                    <button type="submit" class="submit-btn">Сохранить</button>
+                </form>
+            </div>
         </dialog>
 
+        <!-- Модальное окно добавления клиента -->
+        <dialog id="addClientModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('addClientModal')">&times;</span>
+                <h3>Добавить клиента</h3>
+                <form id="addClientForm">
+                    <div class="input-group">
+                        <input type="text" id="clientName" placeholder="ФИО" required>
+                    </div>
+                    <div class="input-group">
+                        <input type="tel" id="clientPhone" placeholder="Телефон" required>
+                    </div>
+                    <div class="input-group">
+                        <input type="date" id="clientLastContact" required>
+                    </div>
+                    <div class="input-group">
+                        <textarea id="clientNotes" placeholder="Заметки"></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Сохранить</button>
+                </form>
+            </div>
+        </dialog>
+
+        <!-- Раздел "Шахматки ЖК" -->
         <div id="chess" class="page">
             <div class="page-header">
                 <button class="back-button" onclick="showMainMenu()">
@@ -89,6 +154,7 @@
             </div>
         </div>
         
+        <!-- Раздел "Риэлторы" -->
         <div id="realtors" class="page">
             <div class="page-header">
                 <button class="back-button" onclick="showMainMenu()">
@@ -110,11 +176,17 @@
             <div class="realtors-container" id="realtorsContainer"></div>
         </div>
         
+        <!-- Раздел "Клиенты" -->
         <div id="clients" class="page">
-            <button class="back-button" onclick="showMainMenu()">
-                <i class="fas fa-arrow-left"></i> Назад
-            </button>
-            <h2>Клиенты</h2>
+            <div class="page-header">
+                <button class="back-button" onclick="showMainMenu()">
+                    <i class="fas fa-arrow-left"></i> Назад
+                </button>
+                <h2>Клиенты</h2>
+                <button class="add-floating-btn" id="addClientBtn">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
             
             <div class="controls">
                 <input type="text" id="clientSearch" placeholder="Поиск клиента..." class="search-input">
@@ -127,7 +199,7 @@
             
             <div id="clientModal" class="modal client-modal">
                 <div class="modal-content">
-                    <span class="close" onclick="closeModal()">&times;</span>
+                    <span class="close" onclick="closeModal('clientModal')">&times;</span>
                     <h3 id="modalClientName"></h3>
                     <div class="client-info">
                         <p><strong>Телефон:</strong> <span id="modalClientPhone"></span></p>
@@ -139,6 +211,7 @@
             </div>
         </div>
         
+        <!-- Раздел "Галерея" -->
         <div id="gallery" class="page">
             <button class="back-button" onclick="showMainMenu()">
                 <i class="fas fa-arrow-left"></i> Назад
