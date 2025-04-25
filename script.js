@@ -1,32 +1,36 @@
-// Данные (из вашего кода + новые поля)
-let projectsData = JSON.parse(localStorage.getItem('projectsData')) || [...];
+// Основные данные
+let currentBuildingId = null;
+let currentClientId = null;
+let currentGalleryBuilding = null;
 let currentRole = 'admin';
 
-// Система ролей (новое)
+// Данные (из вашего кода)
+const projectsData = [...];
+const realtorsData = [...];
+const clientsData = [...];
+const galleryData = [...];
+
+// Система ролей
 function setRole(role) {
     currentRole = role;
-    document.body.className = role;
-    updateUI();
-}
-
-function updateUI() {
-    // Скрываем кнопки добавления для риэлторов
-    document.querySelectorAll('.admin-only').forEach(el => {
-        el.style.display = currentRole === 'admin' ? 'block' : 'none';
+    document.body.className = `${role} ${document.body.classList.contains('dark-mode') ? 'dark-mode' : ''}`;
+    document.querySelectorAll('.role-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.role === role);
     });
+    toggleAddButton();
 }
 
-// Плавающая кнопка "+" (новое)
+function toggleAddButton() {
+    document.getElementById('addFloatingBtn').style.display = 
+        currentRole === 'admin' ? 'block' : 'none';
+}
+
+// Добавление ЖК
 document.getElementById('addFloatingBtn').addEventListener('click', () => {
-    if (currentRole !== 'admin') {
-        alert('Только админ может добавлять данные!');
-        return;
-    }
-    document.getElementById('addProjectModal').showModal();
+    document.getElementById('addModal').showModal();
 });
 
-// Добавление ЖК (новое)
-document.getElementById('projectForm').addEventListener('submit', (e) => {
+document.getElementById('addForm').addEventListener('submit', (e) => {
     e.preventDefault();
     const newProject = {
         id: Date.now(),
@@ -37,15 +41,20 @@ document.getElementById('projectForm').addEventListener('submit', (e) => {
     };
     projectsData.push(newProject);
     localStorage.setItem('projectsData', JSON.stringify(projectsData));
-    document.getElementById('addProjectModal').close();
-    renderProjects(projectsData); // Ваша существующая функция
+    document.getElementById('addModal').close();
+    renderProjects(projectsData);
+    document.getElementById('addForm').reset();
 });
 
-// Ваши существующие функции остаются без изменений
-// function showPage(), renderProjects(), и т.д.
+// [Все ваши предыдущие функции сохраняются без изменений...]
 
 // Инициализация
 document.addEventListener('DOMContentLoaded', () => {
     setRole('admin');
     showMainMenu();
+    
+    // Обработчики для кнопок ролей
+    document.querySelectorAll('.role-btn').forEach(btn => {
+        btn.addEventListener('click', () => setRole(btn.dataset.role));
+    });
 });
