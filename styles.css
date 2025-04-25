@@ -6,6 +6,7 @@
     --admin-color: #e74c3c;
     --realtor-color: #3498db;
 }
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
@@ -15,23 +16,28 @@ body {
     transition: all 0.5s ease;
     min-height: 100vh;
 }
+
 body.dark-mode {
     background-color: var(--dark);
     color: var(--light);
 }
+
 body.admin { --role-color: var(--admin-color); }
 body.realtor { --role-color: var(--realtor-color); }
+
 .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
 }
+
 h1 {
     text-align: center;
     font-size: 2.5rem;
     margin-bottom: 30px;
     position: relative;
 }
+
 h1::after {
     content: '';
     position: absolute;
@@ -42,13 +48,14 @@ h1::after {
     background: linear-gradient(90deg, var(--primary), var(--accent));
     border-radius: 3px;
 }
-/* Кнопки ролей */
+
 .role-buttons {
     display: flex;
     gap: 10px;
     justify-content: center;
     margin-bottom: 20px;
 }
+
 .role-btn {
     padding: 8px 15px;
     border: none;
@@ -57,11 +64,12 @@ h1::after {
     background: #eee;
     transition: all 0.3s;
 }
+
 .role-btn.active {
     background: var(--role-color);
     color: white;
 }
-/* Плавающая кнопка "+" */
+
 .add-floating-btn {
     position: fixed;
     bottom: 30px;
@@ -79,10 +87,11 @@ h1::after {
     transition: all 0.3s;
     display: none;
 }
+
 .add-floating-btn:hover {
     transform: scale(1.1);
 }
-/* Модальное окно */
+
 .modal {
     border: none;
     border-radius: 12px;
@@ -91,17 +100,21 @@ h1::after {
     max-width: 500px;
     background: var(--light);
 }
+
 body.dark-mode .modal {
     background: var(--dark);
     color: white;
 }
+
 .modal::backdrop {
     background: rgba(0,0,0,0.5);
 }
+
 .modal h3 {
     margin-top: 0;
     color: var(--primary);
 }
+
 .modal input, .modal select {
     width: 100%;
     padding: 10px;
@@ -111,12 +124,14 @@ body.dark-mode .modal {
     background: var(--light);
     color: var(--dark);
 }
+
 body.dark-mode .modal input,
 body.dark-mode .modal select {
     background: #444;
     border-color: #666;
     color: white;
 }
+
 .modal button[type="submit"] {
     background: var(--primary);
     color: white;
@@ -128,16 +143,18 @@ body.dark-mode .modal select {
     margin-top: 10px;
     transition: background 0.3s;
 }
+
 .modal button[type="submit"]:hover {
     background: #5649d6;
 }
-/* Остальные стили */
+
 .menu-container {
     display: grid;
     grid-template-columns: 1fr;
     gap: 20px;
     margin-top: 40px;
 }
+
 .menu-button {
     display: flex;
     align-items: center;
@@ -155,6 +172,7 @@ body.dark-mode .modal select {
     position: relative;
     overflow: hidden;
 }
+
 .menu-button::before {
     content: '';
     position: absolute;
@@ -165,21 +183,26 @@ body.dark-mode .modal select {
     background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
     transition: 0.5s;
 }
+
 .menu-button:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 25px rgba(108, 92, 231, 0.5);
 }
+
 .menu-button:hover::before {
     left: 100%;
 }
+
 .page {
     display: none;
     animation: fadeIn 0.5s ease;
 }
+
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
 }
+
 .back-button {
     background: var(--dark);
     color: white;
@@ -193,9 +216,11 @@ body.dark-mode .modal select {
     gap: 8px;
     transition: all 0.3s;
 }
+
 .back-button:hover {
     background: #444;
 }
+
 .theme-toggle {
     position: fixed;
     top: 20px;
@@ -213,6 +238,7 @@ body.dark-mode .modal select {
     z-index: 100;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
+
 .trail-dot {
     position: fixed;
     width: 12px;
@@ -225,12 +251,14 @@ body.dark-mode .modal select {
     transition: opacity 0.3s, transform 0.2s;
     z-index: 99;
 }
+
 .tiles-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 20px;
     margin-top: 20px;
 }
+
 .project-tile {
     background: white;
     border-radius: 12px;
@@ -240,19 +268,23 @@ body.dark-mode .modal select {
     border-left: 4px solid var(--primary);
     cursor: pointer;
 }
+
 body.dark-mode .project-tile {
     background: #3a3a3a;
     color: white;
 }
+
 .project-tile:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 15px rgba(0,0,0,0.15);
 }
+
 .project-title {
     font-weight: bold;
     font-size: 1.1rem;
     margin-bottom: 8px;
 }
+
 .project-status {
     display: inline-block;
     padding: 3px 8px;
@@ -260,23 +292,28 @@ body.dark-mode .project-tile {
     font-size: 0.8rem;
     margin-top: 5px;
 }
+
 .status-active {
     background: #00b894;
     color: white;
 }
+
 .status-planned {
     background: #fdcb6e;
     color: var(--dark);
 }
+
 .status-completed {
     background: #6c5ce7;
     color: white;
 }
+
 .controls {
     display: flex;
     gap: 10px;
     margin: 20px 0;
 }
+
 .search-input {
     flex: 1;
     padding: 10px 15px;
@@ -284,11 +321,13 @@ body.dark-mode .project-tile {
     border-radius: 8px;
     font-size: 1rem;
 }
+
 body.dark-mode .search-input {
     background: #444;
     color: white;
     border-color: #666;
 }
+
 .search-button {
     background: var(--primary);
     color: white;
@@ -298,17 +337,21 @@ body.dark-mode .search-input {
     cursor: pointer;
     transition: background 0.3s;
 }
+
 .search-button:hover {
     background: #5649d6;
 }
+
 .flats-container {
     margin-top: 30px;
 }
+
 .floor-section {
     margin-bottom: 30px;
     border-bottom: 1px solid #ddd;
     padding-bottom: 15px;
 }
+
 .floor-title {
     font-size: 1.3rem;
     color: var(--primary);
@@ -318,64 +361,78 @@ body.dark-mode .search-input {
     border-radius: 6px;
     display: inline-block;
 }
+
 .flats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 15px;
 }
+
 .flat-tile {
     padding: 12px;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     transition: transform 0.3s;
 }
+
 .flat-tile:hover {
     transform: translateY(-3px);
 }
+
 .flat-status-sold {
     background: #ff7675;
     color: white;
 }
+
 .flat-status-available {
     background: #55efc4;
     color: var(--dark);
 }
+
 .flat-status-reserved {
     background: #ffeaa7;
     color: var(--dark);
 }
+
 .flat-info {
     margin: 5px 0;
     font-size: 0.9rem;
 }
+
 .realtors-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 20px;
     margin-top: 20px;
 }
+
 .realtor-card {
     background: white;
     border-radius: 10px;
     padding: 15px;
     box-shadow: 0 3px 10px rgba(0,0,0,0.1);
 }
+
 body.dark-mode .realtor-card {
     background: #3a3a3a;
 }
+
 .realtor-name {
     font-size: 1.2rem;
     font-weight: bold;
     margin-bottom: 10px;
     color: var(--primary);
 }
+
 .realtor-phone {
     margin: 8px 0;
 }
+
 .realtor-deals {
     margin-top: 10px;
     font-size: 0.9rem;
 }
+
 .deal-item {
     display: flex;
     justify-content: space-between;
@@ -383,12 +440,14 @@ body.dark-mode .realtor-card {
     padding-bottom: 5px;
     border-bottom: 1px dashed #ddd;
 }
+
 .clients-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 15px;
     margin-top: 20px;
 }
+
 .client-button {
     background: white;
     border: none;
@@ -399,24 +458,30 @@ body.dark-mode .realtor-card {
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     transition: all 0.3s;
 }
+
 body.dark-mode .client-button {
     background: #3a3a3a;
 }
+
 .client-button:hover {
     transform: translateY(-3px);
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
+
 .client-name {
     font-weight: bold;
     margin-bottom: 5px;
 }
+
 .client-phone {
     font-size: 0.9rem;
     color: #666;
 }
+
 body.dark-mode .client-phone {
     color: #aaa;
 }
+
 .modal {
     display: none;
     position: fixed;
@@ -427,6 +492,7 @@ body.dark-mode .client-phone {
     height: 100%;
     background-color: rgba(0,0,0,0.5);
 }
+
 .modal-content {
     background-color: white;
     margin: 5% auto;
@@ -436,10 +502,12 @@ body.dark-mode .client-phone {
     max-width: 600px;
     box-shadow: 0 5px 20px rgba(0,0,0,0.3);
 }
+
 body.dark-mode .modal-content {
     background-color: #3a3a3a;
     color: white;
 }
+
 .close {
     color: #aaa;
     float: right;
@@ -447,12 +515,15 @@ body.dark-mode .modal-content {
     font-weight: bold;
     cursor: pointer;
 }
+
 .close:hover {
     color: #777;
 }
+
 .client-info {
     margin: 15px 0;
 }
+
 #clientNotes {
     width: 100%;
     height: 150px;
@@ -462,11 +533,13 @@ body.dark-mode .modal-content {
     border: 1px solid #ddd;
     resize: none;
 }
+
 body.dark-mode #clientNotes {
     background: #444;
     color: white;
     border-color: #666;
 }
+
 .save-button {
     background: var(--primary);
     color: white;
@@ -476,15 +549,18 @@ body.dark-mode #clientNotes {
     cursor: pointer;
     transition: background 0.3s;
 }
+
 .save-button:hover {
     background: #5649d6;
 }
+
 .gallery-buttons {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 15px;
     margin-top: 20px;
 }
+
 .gallery-button {
     background: var(--primary);
     color: white;
@@ -495,36 +571,44 @@ body.dark-mode #clientNotes {
     cursor: pointer;
     transition: all 0.3s;
 }
+
 .gallery-button:hover {
     background: #5649d6;
     transform: translateY(-3px);
 }
+
 .gallery-content {
     margin-top: 20px;
 }
+
 .media-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 20px;
     margin-top: 20px;
 }
+
 .media-item {
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 3px 10px rgba(0,0,0,0.2);
 }
+
 .media-item img, .media-item video {
     width: 100%;
     height: auto;
     display: block;
 }
+
 @media (max-width: 768px) {
     .realtors-container {
         grid-template-columns: 1fr;
     }
+    
     .flats-grid {
         grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     }
+    
     .modal-content {
         width: 90%;
         margin: 10% auto;
