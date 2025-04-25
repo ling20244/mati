@@ -375,4 +375,112 @@ window.saveClientNotes = function() {
     }
 };
 
-window.filterClients = function
+window.filterClients = function() {
+    const searchTerm = document.getElementById('clientSearch').value.toLowerCase();
+    const filtered = clientsData.filter(client => 
+        client.name.toLowerCase().includes(searchTerm) || 
+        client.phone.toLowerCase().includes(searchTerm)
+    );
+    renderClients(filtered);
+};
+
+// ===== РАЗДЕЛ "ГАЛЕРЕЯ" =====
+function renderGalleryButtons() {
+    const container = document.getElementById('galleryButtons');
+    container.innerHTML = '';
+    
+    galleryData.forEach(building => {
+        const button = document.createElement('button');
+        button.className = 'gallery-button';
+        button.textContent = building.name;
+        
+        button.addEventListener('click', () => showGalleryContent(building));
+        container.appendChild(button);
+    });
+}
+
+function showGalleryContent(building) {
+    currentGalleryBuilding = building.id;
+    document.getElementById('galleryButtons').style.display = 'none';
+    document.getElementById('galleryContent').style.display = 'block';
+    document.getElementById('galleryBuildingTitle').textContent = building.name;
+    
+    const mediaContainer = document.getElementById('mediaContainer');
+    mediaContainer.innerHTML = '';
+    
+    building.media.forEach(item => {
+        const mediaItem = document.createElement('div');
+        mediaItem.className = 'media-item';
+        
+        if (item.type === 'image') {
+            mediaItem.innerHTML = `
+                <img src="${item.url}" alt="${item.title}">
+                <div class="media-title">${item.title}</div>
+            `;
+        } else if (item.type === 'video') {
+            mediaItem.innerHTML = `
+                <video controls>
+                    <source src="${item.url}" type="video/mp4">
+                    Ваш браузер не поддерживает видео.
+                </video>
+                <div class="media-title">${item.title}</div>
+            `;
+        }
+        
+        mediaContainer.appendChild(mediaItem);
+    });
+}
+
+window.hideGalleryContent = function() {
+    document.getElementById('galleryContent').style.display = 'none';
+    document.getElementById('galleryButtons').style.display = 'grid';
+};
+
+// Инициализация
+document.addEventListener('DOMContentLoaded', function() {
+    // Инициализация ролей
+    setRole('admin');
+    
+    // Обработчики для кнопок ролей
+    document.querySelectorAll('.role-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            setRole(this.dataset.role);
+        });
+    });
+    
+    // Показываем главное меню при загрузке
+    showMainMenu();
+    
+    // Инициализация темы
+    initThemeToggle();
+    
+    // Инициализация шлейфа курсора
+    initCursorTrail();
+    
+    // Обработчик для модального окна добавления ЖК
+    document.getElementById('addFloatingBtn').addEventListener('click', function() {
+        document.getElementById('addModal').showModal();
+    });
+    
+    document.getElementById('addForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const newProject = {
+            id: Date.now(),
+            name: document.getElementById('projectName').value,
+            address: document.getElementById('projectAddress').value,
+            status: document.getElementById('projectStatus').value,
+            flats: []
+        };
+        projectsData.push(newProject);
+        document.getElementById('addModal').close();
+        renderProjects(projectsData);
+        document.getElementById('addForm').reset();
+    });
+    
+    // Закрытие модального окна клиента при клике вне его
+    window.addEventListener('click', function(event) {
+        if (event.target === document.getElementById('clientModal')) {
+            closeModal();
+        }
+    });
+});
