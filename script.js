@@ -4,41 +4,8 @@ let currentClientId = null;
 let currentGalleryBuilding = null;
 let currentRole = 'admin';
 
-// Генерация CSRF токена
-function generateCSRFToken() {
-    return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-}
-
-// Санитизация HTML
-function sanitizeHTML(str) {
-    const div = document.createElement('div');
-    div.textContent = str;
-    return div.innerHTML;
-}
-
-// Загрузка данных из localStorage
-function loadData() {
-    const savedProjects = localStorage.getItem('projectsData');
-    const savedRealtors = localStorage.getItem('realtorsData');
-    const savedClients = localStorage.getItem('clientsData');
-    const savedGallery = localStorage.getItem('galleryData');
-    
-    if (savedProjects) projectsData = JSON.parse(savedProjects);
-    if (savedRealtors) realtorsData = JSON.parse(savedRealtors);
-    if (savedClients) clientsData = JSON.parse(savedClients);
-    if (savedGallery) galleryData = JSON.parse(savedGallery);
-}
-
-// Сохранение данных в localStorage
-function saveData() {
-    localStorage.setItem('projectsData', JSON.stringify(projectsData));
-    localStorage.setItem('realtorsData', JSON.stringify(realtorsData));
-    localStorage.setItem('clientsData', JSON.stringify(clientsData));
-    localStorage.setItem('galleryData', JSON.stringify(galleryData));
-}
-
 // Данные ЖК
-let projectsData = [
+const projectsData = [
     { 
         id: 1, 
         name: "ЖК Северное Сияние", 
@@ -67,7 +34,7 @@ let projectsData = [
 ];
 
 // Данные риэлторов
-let realtorsData = [
+const realtorsData = [
     {
         id: 1,
         name: "Иванов Иван Иванович",
@@ -88,7 +55,7 @@ let realtorsData = [
 ];
 
 // Данные клиентов
-let clientsData = [
+const clientsData = [
     {
         id: 1,
         name: "Смирнов Алексей Владимирович",
@@ -106,13 +73,13 @@ let clientsData = [
 ];
 
 // Данные галереи
-let galleryData = [
+const galleryData = [
     {
         id: 1,
         name: "ЖК Северное Сияние",
         media: [
-            { type: "image", url: "placeholder.jpg", dataSrc: "https://via.placeholder.com/600x400?text=Фасад+ЖК+Северное+Сияние", title: "Фасад здания" },
-            { type: "image", url: "placeholder.jpg", dataSrc: "https://via.placeholder.com/600x400?text=Вид+из+окна", title: "Вид из окна" },
+            { type: "image", url: "https://via.placeholder.com/600x400?text=Фасад+ЖК+Северное+Сияние", title: "Фасад здания" },
+            { type: "image", url: "https://via.placeholder.com/600x400?text=Вид+из+окна", title: "Вид из окна" },
             { type: "video", url: "https://samplelib.com/lib/preview/mp4/sample-5s.mp4", title: "Видео обзор" }
         ]
     },
@@ -120,8 +87,8 @@ let galleryData = [
         id: 2,
         name: "ЖК Центральный",
         media: [
-            { type: "image", url: "placeholder.jpg", dataSrc: "https://via.placeholder.com/600x400?text=Входная+группа", title: "Входная группа" },
-            { type: "image", url: "placeholder.jpg", dataSrc: "https://via.placeholder.com/600x400?text=Дворовая+территория", title: "Дворовая территория" }
+            { type: "image", url: "https://via.placeholder.com/600x400?text=Входная+группа", title: "Входная группа" },
+            { type: "image", url: "https://via.placeholder.com/600x400?text=Дворовая+территория", title: "Дворовая территория" }
         ]
     }
 ];
@@ -132,10 +99,9 @@ function setRole(role) {
     document.body.className = role + (document.body.classList.contains('dark-mode') ? ' dark-mode' : '');
     document.querySelectorAll('.role-btn').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.role === role);
-        btn.setAttribute('aria-pressed', btn.dataset.role === role);
     });
-    document.getElementById('addFloatingBtn').style.display = role === 'admin' ? 'block' : 'none';
-    saveData();
+    // Управление видимостью кнопки добавления
+    document.getElementById('addFloatingBtn').style.display = role === 'admin' ? 'flex' : 'none';
 }
 
 // Основные функции
@@ -172,14 +138,7 @@ function initThemeToggle() {
         this.innerHTML = document.body.classList.contains('dark-mode') 
             ? '<i class="fas fa-sun"></i>' 
             : '<i class="fas fa-moon"></i>';
-        saveData();
     });
-    
-    // Восстановление темы
-    if (localStorage.getItem('darkMode') === 'true') {
-        document.body.classList.add('dark-mode');
-        themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-    }
 }
 
 // Шлейф курсора
@@ -225,16 +184,9 @@ function renderProjects(projects) {
     const container = document.getElementById('projectsContainer');
     container.innerHTML = '';
     
-    if (projects.length === 0) {
-        container.innerHTML = '<div class="no-results">Нет доступных ЖК</div>';
-        return;
-    }
-    
     projects.forEach(project => {
         const tile = document.createElement('div');
         tile.className = 'project-tile';
-        tile.tabIndex = 0;
-        tile.setAttribute('role', 'gridcell');
         
         let statusClass = '';
         let statusText = '';
@@ -254,34 +206,16 @@ function renderProjects(projects) {
         }
         
         tile.innerHTML = `
-            <div class="project-title">${sanitizeHTML(project.name)}</div>
-            <div><small>Адрес:</small> ${sanitizeHTML(project.address)}</div>
-            <div><small>Готовность:</small> ${sanitizeHTML(project.progress)}</div>
+            <div class="project-title">${project.name}</div>
+            <div><small>Адрес:</small> ${project.address}</div>
+            <div><small>Готовность:</small> ${project.progress}</div>
             <div class="project-status ${statusClass}">${statusText}</div>
         `;
         
         tile.addEventListener('click', () => showFlats(project));
-        tile.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') showFlats(project);
-        });
         container.appendChild(tile);
     });
 }
-
-window.sortProjects = function() {
-    const sortBy = document.getElementById('sortProjects').value;
-    const sortedProjects = [...projectsData].sort((a, b) => {
-        if (sortBy === 'name') return a.name.localeCompare(b.name);
-        if (sortBy === 'status') return a.status.localeCompare(b.status);
-        if (sortBy === 'progress') {
-            const progressA = parseInt(a.progress);
-            const progressB = parseInt(b.progress);
-            return progressB - progressA;
-        }
-        return 0;
-    });
-    renderProjects(sortedProjects);
-};
 
 function showFlats(project) {
     currentBuildingId = project.id;
@@ -302,7 +236,7 @@ function showFlats(project) {
     });
     
     // Сортируем этажи и рендерим
-    Object.keys(floors).sort((a, b) => b - a).forEach(floor => {
+    Object.keys(floors).sort().forEach(floor => {
         const floorSection = document.createElement('div');
         floorSection.className = 'floor-section';
         
@@ -317,7 +251,6 @@ function showFlats(project) {
         floors[floor].forEach(flat => {
             const flatTile = document.createElement('div');
             flatTile.className = `flat-tile flat-status-${flat.status}`;
-            flatTile.tabIndex = 0;
             
             let statusText = '';
             switch(flat.status) {
@@ -327,8 +260,8 @@ function showFlats(project) {
             }
             
             flatTile.innerHTML = `
-                <div class="flat-info"><strong>Кв. ${sanitizeHTML(flat.number)}</strong></div>
-                <div class="flat-info">Площадь: ${sanitizeHTML(flat.area)} м²</div>
+                <div class="flat-info"><strong>Кв. ${flat.number}</strong></div>
+                <div class="flat-info">Площадь: ${flat.area} м²</div>
                 <div class="flat-info">Цена: ${(flat.area * flat.price).toLocaleString()} ₽</div>
                 <div class="flat-info">(${flat.price.toLocaleString()} ₽/м²)</div>
                 <div class="flat-info"><strong>${statusText}</strong></div>
@@ -361,15 +294,9 @@ function renderRealtors(realtors) {
     const container = document.getElementById('realtorsContainer');
     container.innerHTML = '';
     
-    if (realtors.length === 0) {
-        container.innerHTML = '<div class="no-results">Нет данных о риэлторах</div>';
-        return;
-    }
-    
     realtors.forEach(realtor => {
         const card = document.createElement('div');
         card.className = 'realtor-card';
-        card.tabIndex = 0;
         
         let dealsHtml = '';
         if (realtor.deals && realtor.deals.length > 0) {
@@ -377,18 +304,18 @@ function renderRealtors(realtors) {
             realtor.deals.forEach(deal => {
                 dealsHtml += `
                     <div class="deal-item">
-                        <span>${sanitizeHTML(deal.date)}</span>
-                        <span>${sanitizeHTML(deal.sum)}</span>
+                        <span>${deal.date}</span>
+                        <span>${deal.sum}</span>
                     </div>
-                    <div>${sanitizeHTML(deal.object)}</div>
+                    <div>${deal.object}</div>
                 `;
             });
             dealsHtml += '</div>';
         }
         
         card.innerHTML = `
-            <div class="realtor-name">${sanitizeHTML(realtor.name)}</div>
-            <div class="realtor-phone"><i class="fas fa-phone"></i> ${sanitizeHTML(realtor.phone)}</div>
+            <div class="realtor-name">${realtor.name}</div>
+            <div class="realtor-phone"><i class="fas fa-phone"></i> ${realtor.phone}</div>
             ${dealsHtml}
         `;
         
@@ -410,18 +337,13 @@ function renderClients(clients) {
     const container = document.getElementById('clientsContainer');
     container.innerHTML = '';
     
-    if (clients.length === 0) {
-        container.innerHTML = '<div class="no-results">Нет данных о клиентах</div>';
-        return;
-    }
-    
     clients.forEach(client => {
         const button = document.createElement('button');
         button.className = 'client-button';
         
         button.innerHTML = `
-            <div class="client-name">${sanitizeHTML(client.name)}</div>
-            <div class="client-phone">${sanitizeHTML(client.phone)}</div>
+            <div class="client-name">${client.name}</div>
+            <div class="client-phone">${client.phone}</div>
         `;
         
         button.addEventListener('click', () => openClientModal(client));
@@ -436,172 +358,4 @@ function openClientModal(client) {
     document.getElementById('modalClientLastContact').textContent = client.lastContact || 'нет данных';
     document.getElementById('clientNotes').value = client.notes || '';
     
-    document.getElementById('clientModal').style.display = 'block';
-}
-
-window.closeModal = function() {
-    document.getElementById('clientModal').style.display = 'none';
-};
-
-window.saveClientNotes = function() {
-    if (currentClientId) {
-        const client = clientsData.find(c => c.id === currentClientId);
-        if (client) {
-            client.notes = document.getElementById('clientNotes').value;
-            alert('Заметки сохранены');
-            saveData();
-            closeModal();
-        }
-    }
-};
-
-window.filterClients = function() {
-    const searchTerm = document.getElementById('clientSearch').value.toLowerCase();
-    const filtered = clientsData.filter(client => 
-        client.name.toLowerCase().includes(searchTerm) || 
-        client.phone.toLowerCase().includes(searchTerm)
-    );
-    renderClients(filtered);
-};
-
-// ===== РАЗДЕЛ "ГАЛЕРЕЯ" =====
-function renderGalleryButtons() {
-    const container = document.getElementById('galleryButtons');
-    container.innerHTML = '';
-    
-    if (galleryData.length === 0) {
-        container.innerHTML = '<div class="no-results">Нет доступных галерей</div>';
-        return;
-    }
-    
-    galleryData.forEach(building => {
-        const button = document.createElement('button');
-        button.className = 'gallery-button';
-        button.textContent = building.name;
-        
-        button.addEventListener('click', () => showGalleryContent(building));
-        container.appendChild(button);
-    });
-}
-
-function showGalleryContent(building) {
-    currentGalleryBuilding = building.id;
-    document.getElementById('galleryButtons').style.display = 'none';
-    document.getElementById('galleryContent').style.display = 'block';
-    document.getElementById('galleryBuildingTitle').textContent = building.name;
-    
-    const mediaContainer = document.getElementById('mediaContainer');
-    mediaContainer.innerHTML = '';
-    
-    building.media.forEach(item => {
-        const mediaItem = document.createElement('div');
-        mediaItem.className = 'media-item';
-        
-        if (item.type === 'image') {
-            mediaItem.innerHTML = `
-                <img src="${item.url}" data-src="${item.dataSrc || item.url}" alt="${sanitizeHTML(item.title)}" loading="lazy">
-                <div class="media-title">${sanitizeHTML(item.title)}</div>
-            `;
-        } else if (item.type === 'video') {
-            mediaItem.innerHTML = `
-                <video controls>
-                    <source src="${item.url}" type="video/mp4">
-                    Ваш браузер не поддерживает видео.
-                </video>
-                <div class="media-title">${sanitizeHTML(item.title)}</div>
-            `;
-        }
-        
-        mediaContainer.appendChild(mediaItem);
-    });
-    
-    // Инициализация lazy loading
-    const lazyImages = document.querySelectorAll('img[data-src]');
-    const imageObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const img = entry.target;
-                img.src = img.dataset.src;
-                imageObserver.unobserve(img);
-            }
-        });
-    });
-
-    lazyImages.forEach(img => imageObserver.observe(img));
-}
-
-window.hideGalleryContent = function() {
-    document.getElementById('galleryContent').style.display = 'none';
-    document.getElementById('galleryButtons').style.display = 'grid';
-};
-
-// Инициализация
-document.addEventListener('DOMContentLoaded', function() {
-    // Загрузка сохранённых данных
-    loadData();
-    
-    // Установка CSRF токена
-    document.getElementById('csrfToken').value = generateCSRFToken();
-    
-    // Инициализация ролей
-    setRole('admin');
-    
-    // Обработчики для кнопок ролей
-    document.querySelectorAll('.role-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            setRole(this.dataset.role);
-        });
-    });
-    
-    // Показываем главное меню при загрузке
-    showMainMenu();
-    
-    // Инициализация темы
-    initThemeToggle();
-    
-    // Инициализация шлейфа курсора
-    initCursorTrail();
-    
-    // Обработчик для модального окна добавления ЖК
-    document.getElementById('addFloatingBtn').addEventListener('click', function() {
-        document.getElementById('addModal').showModal();
-    });
-    
-    document.getElementById('addForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const name = document.getElementById('projectName').value.trim();
-        const address = document.getElementById('projectAddress').value.trim();
-        
-        if (!name || !address) {
-            alert('Заполните все обязательные поля');
-            return;
-        }
-        
-        const newProject = {
-            id: Date.now(),
-            name: sanitizeHTML(name),
-            address: sanitizeHTML(address),
-            status: document.getElementById('projectStatus').value,
-            progress: "0%",
-            flats: []
-        };
-        
-        projectsData.push(newProject);
-        document.getElementById('addModal').close();
-        renderProjects(projectsData);
-        document.getElementById('addForm').reset();
-        saveData();
-    });
-    
-    // Закрытие модального окна клиента при клике вне его
-    window.addEventListener('click', function(event) {
-        if (event.target === document.getElementById('clientModal')) {
-            closeModal();
-        }
-    });
-    
-    // Сохранение темы при закрытии
-    window.addEventListener('beforeunload', function() {
-        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
-    });
-});
+    document.getElementById('clientModal').style.display = 'block
