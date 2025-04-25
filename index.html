@@ -13,8 +13,7 @@
             <i class="fas fa-moon"></i>
         </button>
         
-        <!-- Добавлено: Кнопки выбора роли -->
-        <div class="role-selector">
+        <div class="role-buttons">
             <button class="role-btn active" data-role="admin">Админ</button>
             <button class="role-btn" data-role="realtor">Риэлтор</button>
         </div>
@@ -23,30 +22,123 @@
         
         <div id="mainMenu">
             <div class="menu-container">
-                <!-- Ваши кнопки меню без изменений -->
+                <button class="menu-button" onclick="showPage('chess')">
+                    <i class="fas fa-chess-rook"></i> Шахматки ЖК
+                </button>
+                <button class="menu-button" onclick="showPage('realtors')">
+                    <i class="fas fa-user-tie"></i> Риэлторы
+                </button>
+                <button class="menu-button" onclick="showPage('clients')">
+                    <i class="fas fa-users"></i> Клиенты
+                </button>
+                <button class="menu-button" onclick="showPage('gallery')">
+                    <i class="fas fa-images"></i> Галерея
+                </button>
             </div>
         </div>
-        
-        <!-- Добавлено: Плавающая кнопка "+" -->
+
         <button class="add-floating-btn" id="addFloatingBtn">
             <i class="fas fa-plus"></i>
         </button>
 
-        <!-- Добавлено: Модальное окно для добавления ЖК -->
         <dialog id="addModal" class="modal">
             <form id="addForm">
                 <h3>Добавить ЖК</h3>
-                <input type="text" id="buildingName" placeholder="Название" required>
-                <input type="text" id="buildingAddress" placeholder="Адрес" required>
+                <input type="text" id="projectName" placeholder="Название" required>
+                <input type="text" id="projectAddress" placeholder="Адрес" required>
+                <select id="projectStatus">
+                    <option value="active">В работе</option>
+                    <option value="planned">Планируется</option>
+                </select>
                 <button type="submit">Сохранить</button>
             </form>
         </dialog>
 
-        <!-- Ваши существующие разделы без изменений -->
-        <div id="chess" class="page">...</div>
-        <div id="realtors" class="page">...</div>
-        <div id="clients" class="page">...</div>
-        <div id="gallery" class="page">...</div>
+        <div id="chess" class="page">
+            <button class="back-button" onclick="showMainMenu()">
+                <i class="fas fa-arrow-left"></i> Назад
+            </button>
+            <h2>Шахматки ЖК</h2>
+            
+            <div class="controls">
+                <input type="text" id="searchInput" placeholder="Поиск ЖК..." class="search-input">
+                <button onclick="filterProjects()" class="search-button">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+            
+            <div class="tiles-container" id="projectsContainer"></div>
+            
+            <div id="flatsContainer" class="flats-container" style="display:none;">
+                <button class="back-button" onclick="hideFlats()">
+                    <i class="fas fa-arrow-left"></i> Назад к ЖК
+                </button>
+                <h3 id="currentBuildingTitle"></h3>
+                <div class="floors-container" id="floorsContainer"></div>
+            </div>
+        </div>
+        
+        <div id="realtors" class="page">
+            <button class="back-button" onclick="showMainMenu()">
+                <i class="fas fa-arrow-left"></i> Назад
+            </button>
+            <h2>Риэлторы</h2>
+            
+            <div class="controls">
+                <input type="text" id="realtorSearch" placeholder="Поиск риэлтора..." class="search-input">
+                <button onclick="filterRealtors()" class="search-button">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+            
+            <div class="realtors-container" id="realtorsContainer"></div>
+        </div>
+        
+        <div id="clients" class="page">
+            <button class="back-button" onclick="showMainMenu()">
+                <i class="fas fa-arrow-left"></i> Назад
+            </button>
+            <h2>Клиенты</h2>
+            
+            <div class="controls">
+                <input type="text" id="clientSearch" placeholder="Поиск клиента..." class="search-input">
+                <button onclick="filterClients()" class="search-button">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+            
+            <div class="clients-container" id="clientsContainer"></div>
+            
+            <div id="clientModal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closeModal()">&times;</span>
+                    <h3 id="modalClientName"></h3>
+                    <div class="client-info">
+                        <p><strong>Телефон:</strong> <span id="modalClientPhone"></span></p>
+                        <p><strong>Последний контакт:</strong> <span id="modalClientLastContact"></span></p>
+                    </div>
+                    <textarea id="clientNotes" placeholder="Заметки о клиенте..."></textarea>
+                    <button onclick="saveClientNotes()" class="save-button">Сохранить</button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="gallery" class="page">
+            <button class="back-button" onclick="showMainMenu()">
+                <i class="fas fa-arrow-left"></i> Назад
+            </button>
+            <h2>Галерея</h2>
+            
+            <div class="gallery-buttons" id="galleryButtons"></div>
+            
+            <div id="galleryContent" class="gallery-content" style="display:none;">
+                <button class="back-button" onclick="hideGalleryContent()">
+                    <i class="fas fa-arrow-left"></i> Назад
+                </button>
+                <h3 id="galleryBuildingTitle"></h3>
+                <div class="media-container" id="mediaContainer"></div>
+            </div>
+        </div>
     </div>
 
     <script src="script.js"></script>
