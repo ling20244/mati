@@ -124,7 +124,7 @@
         </div>
         
         <div id="gallery" class="page">
-            <button class="back-button" onclick="showMainMenu()">
+            <button class="back-button" onclick="hideGalleryContent()">
                 <i class="fas fa-arrow-left"></i> Назад
             </button>
             <h2>Галерея</h2>
@@ -132,9 +132,6 @@
             <div class="gallery-buttons" id="galleryButtons"></div>
             
             <div id="galleryContent" class="gallery-content" style="display:none;">
-                <button class="back-button" onclick="hideGalleryContent()">
-                    <i class="fas fa-arrow-left"></i> Назад
-                </button>
                 <h3 id="galleryBuildingTitle"></h3>
                 <div class="media-container" id="mediaContainer"></div>
             </div>
