@@ -5,12 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mati</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body class="dark-mode">
     <div class="container">
         <button class="theme-toggle" id="themeToggle">
-            <i class="fas fa-moon"></i>
+            <i class="fas fa-lightbulb"></i>
         </button>
         
         <div class="role-buttons">
@@ -18,12 +19,12 @@
             <button class="role-btn" data-role="realtor">Риэлтор</button>
         </div>
 
-        <h1>Mati</h1>
+        <h1 class="logo">Mati</h1>
         
         <div id="mainMenu">
             <div class="menu-container">
                 <button class="menu-button" onclick="showPage('chess')">
-                    <i class="fas fa-chess-rook"></i> Шахматки ЖК
+                    <i class="fas fa-building"></i> Шахматки ЖК
                 </button>
                 <button class="menu-button" onclick="showPage('realtors')">
                     <i class="fas fa-user-tie"></i> Риэлторы
@@ -46,6 +47,15 @@
                     <option value="active">В работе</option>
                     <option value="planned">Планируется</option>
                 </select>
+                <button type="submit">Сохранить</button>
+            </form>
+        </dialog>
+
+        <dialog id="addRealtorModal" class="modal">
+            <form id="addRealtorForm">
+                <h3>Добавить риэлтора</h3>
+                <input type="text" id="realtorName" placeholder="ФИО" required>
+                <input type="text" id="realtorPhone" placeholder="Телефон" required>
                 <button type="submit">Сохранить</button>
             </form>
         </dialog>
@@ -80,10 +90,15 @@
         </div>
         
         <div id="realtors" class="page">
-            <button class="back-button" onclick="showMainMenu()">
-                <i class="fas fa-arrow-left"></i> Назад
-            </button>
-            <h2>Риэлторы</h2>
+            <div class="page-header">
+                <button class="back-button" onclick="showMainMenu()">
+                    <i class="fas fa-arrow-left"></i> Назад
+                </button>
+                <h2>Риэлторы</h2>
+                <button class="add-floating-btn" id="addRealtorBtn">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
             
             <div class="controls">
                 <input type="text" id="realtorSearch" placeholder="Поиск риэлтора..." class="search-input">
@@ -110,7 +125,7 @@
             
             <div class="clients-container" id="clientsContainer"></div>
             
-            <div id="clientModal" class="modal">
+            <div id="clientModal" class="modal client-modal">
                 <div class="modal-content">
                     <span class="close" onclick="closeModal()">&times;</span>
                     <h3 id="modalClientName"></h3>
@@ -125,7 +140,7 @@
         </div>
         
         <div id="gallery" class="page">
-            <button class="back-button" onclick="hideGalleryContent()">
+            <button class="back-button" onclick="showMainMenu()">
                 <i class="fas fa-arrow-left"></i> Назад
             </button>
             <h2>Галерея</h2>
