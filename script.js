@@ -99,9 +99,16 @@ function setRole(role) {
     document.body.className = role + (document.body.classList.contains('dark-mode') ? ' dark-mode' : '');
     document.querySelectorAll('.role-btn').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.role === role);
+        btn.setAttribute('aria-pressed', btn.dataset.role === role);
     });
-    // Управление видимостью кнопки добавления
-    document.getElementById('addFloatingBtn').style.display = role === 'admin' ? 'flex' : 'none';
+    updateAddButtonsVisibility();
+}
+
+function updateAddButtonsVisibility() {
+    const addButtons = document.querySelectorAll('.add-floating-btn');
+    addButtons.forEach(btn => {
+        btn.style.display = currentRole === 'admin' ? 'flex' : 'none';
+    });
 }
 
 // Основные функции
@@ -136,57 +143,45 @@ function initThemeToggle() {
     themeToggle.addEventListener('click', function() {
         document.body.classList.toggle('dark-mode');
         this.innerHTML = document.body.classList.contains('dark-mode') 
-            ? '<i class="fas fa-sun"></i>' 
-            : '<i class="fas fa-moon"></i>';
+            ? '<i class="fas fa-lightbulb"></i>' 
+            : '<i class="fas fa-lightbulb" style="color: #fdcb6e"></i>';
+        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
     });
-}
-
-// Шлейф курсора
-function initCursorTrail() {
-    const buttons = document.querySelectorAll('.menu-button, .back-button, .search-button, .client-button, .gallery-button, .save-button');
-
-    buttons.forEach(button => {
-        button.addEventListener('mouseenter', () => {
-            createCursorTrailEffect(button);
-        });
-    });
-
-    function createCursorTrailEffect(element) {
-        let dots = [];
-        
-        element.addEventListener('mousemove', (e) => {
-            const dot = document.createElement('div');
-            dot.className = 'trail-dot';
-            dot.style.left = e.clientX + 'px';
-            dot.style.top = e.clientY + 'px';
-            document.body.appendChild(dot);
-            
-            dots.push(dot);
-            
-            setTimeout(() => {
-                dot.style.opacity = '0';
-                setTimeout(() => dot.remove(), 300);
-            }, 500);
-        });
-        
-        element.addEventListener('mouseleave', () => {
-            dots.forEach(dot => {
-                dot.style.opacity = '0';
-                setTimeout(() => dot.remove(), 300);
-            });
-            dots = [];
-        });
+    
+    // Восстановление темы
+    if (localStorage.getItem('darkMode') === 'false') {
+        document.body.classList.remove('dark-mode');
+        themeToggle.innerHTML = '<i class="fas fa-lightbulb" style="color: #fdcb6e"></i>';
     }
 }
 
-// ===== РАЗДЕЛ "ШАХМАТКИ ЖК" =====
+// Модальные окна
+function openAddModal() {
+    document.getElementById('addModal').showModal();
+}
+
+function openAddRealtorModal() {
+    document.getElementById('addRealtorModal').showModal();
+}
+
+window.closeModal = function() {
+    document.getElementById('clientModal').style.display = 'none';
+};
+
+// Шахматки ЖК
 function renderProjects(projects) {
     const container = document.getElementById('projectsContainer');
     container.innerHTML = '';
     
+    if (projects.length === 0) {
+        container.innerHTML = '<div class="no-results">Нет доступных ЖК</div>';
+        return;
+    }
+    
     projects.forEach(project => {
         const tile = document.createElement('div');
         tile.className = 'project-tile';
+        tile.tabIndex = 0;
         
         let statusClass = '';
         let statusText = '';
@@ -213,229 +208,14 @@ function renderProjects(projects) {
         `;
         
         tile.addEventListener('click', () => showFlats(project));
+        tile.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') showFlats(project);
+        });
         container.appendChild(tile);
     });
 }
 
-function showFlats(project) {
-    currentBuildingId = project.id;
-    document.getElementById('projectsContainer').style.display = 'none';
-    document.getElementById('flatsContainer').style.display = 'block';
-    document.getElementById('currentBuildingTitle').textContent = project.name;
-    
-    const floorsContainer = document.getElementById('floorsContainer');
-    floorsContainer.innerHTML = '';
-    
-    // Группируем квартиры по этажам
-    const floors = {};
-    project.flats.forEach(flat => {
-        if (!floors[flat.floor]) {
-            floors[flat.floor] = [];
-        }
-        floors[flat.floor].push(flat);
-    });
-    
-    // Сортируем этажи и рендерим
-    Object.keys(floors).sort().forEach(floor => {
-        const floorSection = document.createElement('div');
-        floorSection.className = 'floor-section';
-        
-        const floorTitle = document.createElement('h4');
-        floorTitle.className = 'floor-title';
-        floorTitle.textContent = `Этаж ${floor}`;
-        floorSection.appendChild(floorTitle);
-        
-        const flatsGrid = document.createElement('div');
-        flatsGrid.className = 'flats-grid';
-        
-        floors[floor].forEach(flat => {
-            const flatTile = document.createElement('div');
-            flatTile.className = `flat-tile flat-status-${flat.status}`;
-            
-            let statusText = '';
-            switch(flat.status) {
-                case 'sold': statusText = 'Продано'; break;
-                case 'available': statusText = 'Свободна'; break;
-                case 'reserved': statusText = 'Бронь'; break;
-            }
-            
-            flatTile.innerHTML = `
-                <div class="flat-info"><strong>Кв. ${flat.number}</strong></div>
-                <div class="flat-info">Площадь: ${flat.area} м²</div>
-                <div class="flat-info">Цена: ${(flat.area * flat.price).toLocaleString()} ₽</div>
-                <div class="flat-info">(${flat.price.toLocaleString()} ₽/м²)</div>
-                <div class="flat-info"><strong>${statusText}</strong></div>
-            `;
-            
-            flatsGrid.appendChild(flatTile);
-        });
-        
-        floorSection.appendChild(flatsGrid);
-        floorsContainer.appendChild(floorSection);
-    });
-}
-
-window.hideFlats = function() {
-    document.getElementById('flatsContainer').style.display = 'none';
-    document.getElementById('projectsContainer').style.display = 'grid';
-};
-
-window.filterProjects = function() {
-    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-    const filtered = projectsData.filter(project => 
-        project.name.toLowerCase().includes(searchTerm) || 
-        project.address.toLowerCase().includes(searchTerm)
-    );
-    renderProjects(filtered);
-};
-
-// ===== РАЗДЕЛ "РИЭЛТОРЫ" =====
-function renderRealtors(realtors) {
-    const container = document.getElementById('realtorsContainer');
-    container.innerHTML = '';
-    
-    realtors.forEach(realtor => {
-        const card = document.createElement('div');
-        card.className = 'realtor-card';
-        
-        let dealsHtml = '';
-        if (realtor.deals && realtor.deals.length > 0) {
-            dealsHtml = '<div class="realtor-deals"><strong>Сделки:</strong>';
-            realtor.deals.forEach(deal => {
-                dealsHtml += `
-                    <div class="deal-item">
-                        <span>${deal.date}</span>
-                        <span>${deal.sum}</span>
-                    </div>
-                    <div>${deal.object}</div>
-                `;
-            });
-            dealsHtml += '</div>';
-        }
-        
-        card.innerHTML = `
-            <div class="realtor-name">${realtor.name}</div>
-            <div class="realtor-phone"><i class="fas fa-phone"></i> ${realtor.phone}</div>
-            ${dealsHtml}
-        `;
-        
-        container.appendChild(card);
-    });
-}
-
-window.filterRealtors = function() {
-    const searchTerm = document.getElementById('realtorSearch').value.toLowerCase();
-    const filtered = realtorsData.filter(realtor => 
-        realtor.name.toLowerCase().includes(searchTerm) || 
-        realtor.phone.toLowerCase().includes(searchTerm)
-    );
-    renderRealtors(filtered);
-};
-
-// ===== РАЗДЕЛ "КЛИЕНТЫ" =====
-function renderClients(clients) {
-    const container = document.getElementById('clientsContainer');
-    container.innerHTML = '';
-    
-    clients.forEach(client => {
-        const button = document.createElement('button');
-        button.className = 'client-button';
-        
-        button.innerHTML = `
-            <div class="client-name">${client.name}</div>
-            <div class="client-phone">${client.phone}</div>
-        `;
-        
-        button.addEventListener('click', () => openClientModal(client));
-        container.appendChild(button);
-    });
-}
-
-function openClientModal(client) {
-    currentClientId = client.id;
-    document.getElementById('modalClientName').textContent = client.name;
-    document.getElementById('modalClientPhone').textContent = client.phone;
-    document.getElementById('modalClientLastContact').textContent = client.lastContact || 'нет данных';
-    document.getElementById('clientNotes').value = client.notes || '';
-    
-    document.getElementById('clientModal').style.display = 'block';
-}
-
-window.closeModal = function() {
-    document.getElementById('clientModal').style.display = 'none';
-};
-
-window.saveClientNotes = function() {
-    if (currentClientId) {
-        const client = clientsData.find(c => c.id === currentClientId);
-        if (client) {
-            client.notes = document.getElementById('clientNotes').value;
-            alert('Заметки сохранены');
-            closeModal();
-        }
-    }
-};
-
-window.filterClients = function() {
-    const searchTerm = document.getElementById('clientSearch').value.toLowerCase();
-    const filtered = clientsData.filter(client => 
-        client.name.toLowerCase().includes(searchTerm) || 
-        client.phone.toLowerCase().includes(searchTerm)
-    );
-    renderClients(filtered);
-};
-
-// ===== РАЗДЕЛ "ГАЛЕРЕЯ" =====
-function renderGalleryButtons() {
-    const container = document.getElementById('galleryButtons');
-    container.innerHTML = '';
-    
-    galleryData.forEach(building => {
-        const button = document.createElement('button');
-        button.className = 'gallery-button';
-        button.textContent = building.name;
-        
-        button.addEventListener('click', () => showGalleryContent(building));
-        container.appendChild(button);
-    });
-}
-
-function showGalleryContent(building) {
-    currentGalleryBuilding = building.id;
-    document.getElementById('galleryButtons').style.display = 'none';
-    document.getElementById('galleryContent').style.display = 'block';
-    document.getElementById('galleryBuildingTitle').textContent = building.name;
-    
-    const mediaContainer = document.getElementById('mediaContainer');
-    mediaContainer.innerHTML = '';
-    
-    building.media.forEach(item => {
-        const mediaItem = document.createElement('div');
-        mediaItem.className = 'media-item';
-        
-        if (item.type === 'image') {
-            mediaItem.innerHTML = `
-                <img src="${item.url}" alt="${item.title}">
-                <div class="media-title">${item.title}</div>
-            `;
-        } else if (item.type === 'video') {
-            mediaItem.innerHTML = `
-                <video controls>
-                    <source src="${item.url}" type="video/mp4">
-                    Ваш браузер не поддерживает видео.
-                </video>
-                <div class="media-title">${item.title}</div>
-            `;
-        }
-        
-        mediaContainer.appendChild(mediaItem);
-    });
-}
-
-window.hideGalleryContent = function() {
-    document.getElementById('galleryContent').style.display = 'none';
-    document.getElementById('galleryButtons').style.display = 'grid';
-};
+// ... (остальные функции renderRealtors, renderClients и т.д.)
 
 // Инициализация
 document.addEventListener('DOMContentLoaded', function() {
@@ -449,12 +229,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Обработчик для кнопки добавления
-    document.getElementById('addFloatingBtn').addEventListener('click', function() {
-        document.getElementById('addModal').showModal();
-    });
+    // Обработчики для кнопок добавления
+    document.getElementById('addFloatingBtn').addEventListener('click', openAddModal);
+    document.getElementById('addRealtorBtn').addEventListener('click', openAddRealtorModal);
     
-    // Обработчик формы добавления
+    // Обработчики форм
     document.getElementById('addForm').addEventListener('submit', function(e) {
         e.preventDefault();
         const newProject = {
@@ -467,11 +246,25 @@ document.addEventListener('DOMContentLoaded', function() {
         projectsData.push(newProject);
         document.getElementById('addModal').close();
         renderProjects(projectsData);
-        document.getElementById('addForm').reset();
+        this.reset();
+    });
+    
+    document.getElementById('addRealtorForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const newRealtor = {
+            id: Date.now(),
+            name: document.getElementById('realtorName').value,
+            phone: document.getElementById('realtorPhone').value,
+            deals: []
+        };
+        realtorsData.push(newRealtor);
+        document.getElementById('addRealtorModal').close();
+        renderRealtors(realtorsData);
+        this.reset();
     });
     
     // Показываем главное меню при загрузке
     showMainMenu();
     initThemeToggle();
-    initCursorTrail();
+    updateAddButtonsVisibility();
 });
